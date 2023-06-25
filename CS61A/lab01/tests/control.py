@@ -14,20 +14,16 @@ test = {
           ...     else:
           ...         return 25
           >>> xk(10, 10)
-          07fa61723879693a70211246239795ee
-          # locked
+          23
           >>> xk(10, 6)
-          07fa61723879693a70211246239795ee
-          # locked
+          23
           >>> xk(4, 6)
-          3dcab9fe3b2b966fc0dea4bee36cfbe4
-          # locked
+          6
           >>> xk(0, 0)
-          dc549763a66595fb8475050be281005d
-          # locked
+          25
           """,
           'hidden': False,
-          'locked': True
+          'locked': False
         },
         {
           'code': r"""

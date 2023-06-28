@@ -24,6 +24,20 @@ def roll_dice(num_rolls, dice=six_sided):
     # BEGIN PROBLEM 1
     "*** YOUR CODE HERE ***"
     # END PROBLEM 1
+    total = 0
+    has_pig = False
+
+    while num_rolls:
+        score = dice()
+        if score == 1:
+            has_pig = True
+        else:
+            total += score
+        num_rolls -= 1
+    return 1 if has_pig else total
+
+
+
 
 
 def free_bacon(score):
@@ -37,8 +51,11 @@ def free_bacon(score):
     # Trim pi to only (score + 1) digit(s)
     # BEGIN PROBLEM 2
     "*** YOUR CODE HERE ***"
-    # END PROBLEM 2
+    while 100 - score: # why shoudld 
+        pi = pi // 10
+        score += 1
 
+    # END PROBLEM 2
     return pi % 10 + 3
 
 
@@ -57,8 +74,12 @@ def take_turn(num_rolls, opponent_score, dice=six_sided):
     assert opponent_score < 100, 'The game should be over.'
     # BEGIN PROBLEM 3
     "*** YOUR CODE HERE ***"
+    if num_rolls == 0:
+        return free_bacon(opponent_score)
+    else:
+        return roll_dice(num_rolls,dice)
+    
     # END PROBLEM 3
-
 
 def extra_turn(player_score, opponent_score):
     """Return whether the player gets an extra turn."""
@@ -80,7 +101,15 @@ def swine_align(player_score, opponent_score):
     # BEGIN PROBLEM 4a
     "*** YOUR CODE HERE ***"
     # END PROBLEM 4a
-
+    gcd = player_score
+    gcd_max = 0
+    while gcd:
+        if player_score % gcd == 0 and opponent_score % gcd == 0:
+            gcd_max = gcd
+            break
+        else:
+            gcd -= 1
+    return True if gcd >= 10 and player_score > 0 and opponent_score > 0 else False 
 
 def pig_pass(player_score, opponent_score):
     """Return whether the player gets an extra turn due to Pig Pass.

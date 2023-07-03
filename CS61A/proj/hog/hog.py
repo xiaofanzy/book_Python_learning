@@ -51,7 +51,7 @@ def free_bacon(score):
     # Trim pi to only (score + 1) digit(s)
     # BEGIN PROBLEM 2
     "*** YOUR CODE HERE ***"
-    while 100 - score: # why shoudld 
+    while 100 - score: # why shoudld  e
         pi = pi // 10
         score += 1
 
@@ -131,6 +131,8 @@ def pig_pass(player_score, opponent_score):
     # BEGIN PROBLEM 4b
     "*** YOUR CODE HERE ***"
     # END PROBLEM 4b
+    differenct = opponent_score - player_score
+    return True if differenct > 0 and differenct < 3 else False
 
 
 def other(who):
@@ -171,9 +173,36 @@ def play(strategy0, strategy1, score0=0, score1=0, dice=six_sided,
     "*** YOUR CODE HERE ***"
     # END PROBLEM 5
     # (note that the indentation for the problem 6 prompt (***YOUR CODE HERE***) might be misleading)
-    # BEGIN PROBLEM 6
-    "*** YOUR CODE HERE ***"
+    # BEGIN PROBLEM 11
+    
+
+    while score0 < goal and score1 < goal:
+        # add param
+         
+        if who == 0:
+            cur_strange,cur_score,oppo_score = strategy0,score0,score1
+        else:
+            cur_strange,cur_score,oppo_score = strategy1,score1,score0
+        
+        # get score
+        cur_score += take_turn(cur_strange(cur_score,oppo_score),oppo_score,dice)
+        # When this method is called, it only breaks out of the loop if extra_turn is false, but our goal is to exceed the goal.
+        # cur_score += get_score(cur_strange,cur_score,oppo_score,dice)
+
+        if who == 0:
+            score0 = cur_score
+        else:
+            score1 = cur_score
+
+        say = say(score0,score1)
+
+        # countine or next player
+        if extra_turn(cur_score,oppo_score):
+            continue
+        # exchange player
+        who = other(who)
     # END PROBLEM 6
+
     return score0, score1
 
 
@@ -258,6 +287,19 @@ def announce_highest(who, last_score=0, running_high=0):
     # BEGIN PROBLEM 7
     "*** YOUR CODE HERE ***"
     # END PROBLEM 7
+    """
+        this method is return it self because you can compare  max running_high 
+    """
+    def highest(score0,score1):
+        max_increase_score = running_high # create a param because it can't give a new value to running_high
+        high_list = (score1 - last_score) if who else (score0 - last_score)
+        if high_list > running_high:
+            print( high_list,"point(s)! The most yet for Player",who)
+            max_increase_score = high_list
+        return announce_highest(who,score1 if who else score0,max_increase_score)
+    return highest    
+        
+            
 
 
 #######################
@@ -298,7 +340,14 @@ def make_averaged(original_function, trials_count=1000):
     # BEGIN PROBLEM 8
     "*** YOUR CODE HERE ***"
     # END PROBLEM 8
-
+    
+    def ave(*args):
+        trial,sum = trials_count,0
+        while trial:
+            sum += original_function(*args)
+            trial -= 1
+        return sum / trials_count if trials_count else 0
+    return ave
 
 def max_scoring_num_rolls(dice=six_sided, trials_count=1000):
     """Return the number of dice (1 to 10) that gives the highest average turn
@@ -312,6 +361,13 @@ def max_scoring_num_rolls(dice=six_sided, trials_count=1000):
     # BEGIN PROBLEM 9
     "*** YOUR CODE HERE ***"
     # END PROBLEM 9
+    ret, max_score = 0, 0
+    for i in range(1, 11):
+        averaged_dice = make_averaged(roll_dice, trials_count)
+        score = averaged_dice(i, dice)
+        if score > max_score:
+            ret, max_score = i, score
+    return ret
 
 
 def winner(strategy0, strategy1):
